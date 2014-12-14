@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "mumblepahelper.h"
 
 int main(int argc, char *argv[])
