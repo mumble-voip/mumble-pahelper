@@ -138,11 +138,16 @@ void MumblePAHelper::on_qlwPlugins_currentItemChanged(QListWidgetItem *item, QLi
 
     QString name = item->text();
     QReadLocker lock(&plugins->qrwlPlugins);
+    bool bFound = false;
     foreach (PluginInfo *pi, plugins->qlPlugins) {
 	if (pi->shortname == name) {
 	    qlPluginInfo->setText(tr("Filename: %1\nShortname: %2\nDescription: %3").arg(pi->filename, pi->shortname, pi->description));
+	    bFound = true;
 	    break;
 	}
+        if (!bFound){
+            qlPluginInfo->setText(tr("No plugin selected"));
+        }
     }
 }
 
