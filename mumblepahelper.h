@@ -33,6 +33,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QFileDialog>
 #include "Plugins.h"
 #include "ui_MumblePAHelper.h"
 
@@ -61,6 +62,11 @@ public slots:
     void on_action_Unlink_triggered(bool);
     void on_action_Quit_triggered(bool);
     void on_action_Rescan_triggered(bool);
+
+    void on_action_UserPluginsLocation_triggered(bool);
+    void on_action_SystemPluginsLocation_triggered(bool);
+    void on_UserPlugins_clicked(bool);
+    void on_SystemPlugins_clicked(bool);
 };
 
 #endif // MUMBLEPAHELPER_H
