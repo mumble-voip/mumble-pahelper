@@ -53,8 +53,14 @@ PluginInfo::PluginInfo() {
 
 Plugins::Plugins(QObject *p) : QObject(p) {
 	QString AppDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	qsSystemPlugins = AppDataLocation + "/AppData/Roaming/Mumble/Plugins";
-	qsUserPlugins = QLatin1String("Plugins");
+	qsUserPlugins = AppDataLocation + "/AppData/Roaming/Mumble/Plugins";
+
+	if (QDir("C:/Program Files/Mumble/Plugins").exists())
+		qsSystemPlugins = QLatin1String("C:/Program Files/Mumble/Plugins");
+	else if (QDir("C:/Program Files (x86)/Mumble/Plugins").exists())
+		qsSystemPlugins = QLatin1String("C:/Program Files (x86)/Mumble/Plugins");
+	else
+		qsSystemPlugins = QLatin1String("Plugins");
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
