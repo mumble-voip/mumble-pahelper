@@ -74,6 +74,8 @@ class Plugins : public QObject {
 		std::wstring swsIdentity, swsIdentitySent;
 		bool bValid;
 		bool bUnlink;
+		bool UserPlugins = true;
+		bool SystemPlugins = true;
 		float fPosition[3], fFront[3], fTop[3];
 		float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
 
