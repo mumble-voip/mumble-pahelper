@@ -32,7 +32,7 @@
 #include "ui_mumblepahelper.h"
 
 MumblePAHelper::MumblePAHelper(QWidget *parent) :
-	QMainWindow(parent) {
+    QMainWindow(parent) {
     plugins = new Plugins(this);
     plugins->setObjectName(QString::fromUtf8("plugins"));
     setupUi(this);
@@ -43,14 +43,13 @@ MumblePAHelper::MumblePAHelper(QWidget *parent) :
 MumblePAHelper::~MumblePAHelper() {
     if (plugins)
 	delete plugins;
-
 }
 
 void MumblePAHelper::on_plugins_Fetched() {
     QReadLocker lock(&plugins->qrwlPlugins);
 
-	// Output avatar posititon
-	qdsbAPX->setValue(plugins->fPosition[0]);
+    // Output avatar posititon
+    qdsbAPX->setValue(plugins->fPosition[0]);
     qdsbAPY->setValue(plugins->fPosition[1]);
     qdsbAPZ->setValue(plugins->fPosition[2]);
 
@@ -63,7 +62,7 @@ void MumblePAHelper::on_plugins_Fetched() {
     qdsbATZ->setValue(plugins->fTop[2]);
 
     // Output camera position
-	qdsbCPX->setValue(plugins->fCameraPosition[0]);
+    qdsbCPX->setValue(plugins->fCameraPosition[0]);
     qdsbCPY->setValue(plugins->fCameraPosition[1]);
     qdsbCPZ->setValue(plugins->fCameraPosition[2]);
 
@@ -170,24 +169,24 @@ void MumblePAHelper::on_action_SetUserPluginsLocation_triggered(bool) {
     plugins->rescanPlugins();
 }
 
-void MumblePAHelper::on_CurrentPlugins_stateChanged(int state) {
-	if (state == 2)
+void MumblePAHelper::on_qcbCurrentDirectoryPlugins_stateChanged() {
+    if (qcbCurrentDirectoryPlugins->isChecked())
 		plugins->bUseCurrentDirPlugins = true;
 	else
 		plugins->bUseCurrentDirPlugins = false;
 	plugins->rescanPlugins();
 }
 
-void MumblePAHelper::on_SystemPlugins_stateChanged(int state) {
-	if (state == 2)
+void MumblePAHelper::on_qcbSystemPlugins_stateChanged() {
+    if (qcbSystemPlugins->isChecked())
 		plugins->bUseSystemPlugins = true;
 	else
 		plugins->bUseSystemPlugins = false;
 	plugins->rescanPlugins();
 }
 
-void MumblePAHelper::on_UserPlugins_stateChanged(int state) {
-	if (state == 2)
+void MumblePAHelper::on_qcbUserPlugins_stateChanged() {
+    if (qcbUserPlugins->isChecked())
 		plugins->bUseUserPlugins = true;
 	else
 		plugins->bUseUserPlugins = false;
