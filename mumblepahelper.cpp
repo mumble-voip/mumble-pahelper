@@ -156,39 +156,39 @@ void MumblePAHelper::on_action_Rescan_triggered(bool) {
 }
 
 void MumblePAHelper::on_action_SetSystemPluginsLocation_triggered(bool) {
-	QString systemPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set system plugins directory"), plugins->qsSystemPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if (systemPluginsLocation != NULL)
-		plugins->qsSystemPlugins = systemPluginsLocation;
-	plugins->rescanPlugins();
+    QString systemPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set system plugins directory"), plugins->qsSystemPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (systemPluginsLocation != NULL)
+        plugins->qsSystemPlugins = systemPluginsLocation;
+    plugins->rescanPlugins();
 }
 
 void MumblePAHelper::on_action_SetUserPluginsLocation_triggered(bool) {
-	QString userPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set user plugins directory"), plugins->qsUserPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if (userPluginsLocation != NULL)
-		plugins->qsUserPlugins = userPluginsLocation;
+    QString userPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set user plugins directory"), plugins->qsUserPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (userPluginsLocation != NULL)
+        plugins->qsUserPlugins = userPluginsLocation;
     plugins->rescanPlugins();
 }
 
 void MumblePAHelper::on_qcbCurrentDirectoryPlugins_stateChanged() {
     if (qcbCurrentDirectoryPlugins->isChecked())
-		plugins->bUseCurrentDirPlugins = true;
-	else
-		plugins->bUseCurrentDirPlugins = false;
-	plugins->rescanPlugins();
+        plugins->bUseCurrentDirPlugins = true;
+    else
+        plugins->bUseCurrentDirPlugins = false;
+    plugins->rescanPlugins();
 }
 
 void MumblePAHelper::on_qcbSystemPlugins_stateChanged() {
     if (qcbSystemPlugins->isChecked())
-		plugins->bUseSystemPlugins = true;
-	else
-		plugins->bUseSystemPlugins = false;
-	plugins->rescanPlugins();
+        plugins->bUseSystemPlugins = true;
+    else
+        plugins->bUseSystemPlugins = false;
+    plugins->rescanPlugins();
 }
 
 void MumblePAHelper::on_qcbUserPlugins_stateChanged() {
     if (qcbUserPlugins->isChecked())
-		plugins->bUseUserPlugins = true;
-	else
-		plugins->bUseUserPlugins = false;
-	plugins->rescanPlugins();
+        plugins->bUseUserPlugins = true;
+    else
+        plugins->bUseUserPlugins = false;
+    plugins->rescanPlugins();
 }
