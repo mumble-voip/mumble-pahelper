@@ -63,11 +63,13 @@ public slots:
     void on_action_Quit_triggered(bool);
     void on_action_Rescan_triggered(bool);
 
-    void on_action_UserPluginsLocation_triggered(bool);
-    void on_action_SystemPluginsLocation_triggered(bool);
-	void on_CurrentPlugins_clicked(bool);
-	void on_SystemPlugins_clicked(bool);
-	void on_UserPlugins_clicked(bool);
+	void on_action_SetUserPluginsLocation_triggered(bool);
+	void on_action_SetSystemPluginsLocation_triggered(bool);
+
+private slots:
+	void on_CurrentPlugins_stateChanged(int state);
+	void on_SystemPlugins_stateChanged(int state);
+	void on_UserPlugins_stateChanged(int state);
 };
 
 #endif // MUMBLEPAHELPER_H

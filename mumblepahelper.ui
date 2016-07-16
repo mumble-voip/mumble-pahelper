@@ -695,8 +695,8 @@
     <addaction name="action_Unlink"/>
     <addaction name="action_Rescan"/>
     <addaction name="separator"/>
-    <addaction name="action_UserPluginsLocation"/>
-    <addaction name="action_SystemPluginsLocation"/>
+    <addaction name="action_SetUserPluginsLocation"/>
+    <addaction name="action_SetSystemPluginsLocation"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
@@ -717,14 +717,14 @@
     <string>&amp;Rescan</string>
    </property>
   </action>
-  <action name="action_UserPluginsLocation">
+  <action name="action_SetUserPluginsLocation">
    <property name="text">
-    <string>&amp;User plugins location...</string>
+    <string>&amp;Set user plugins location...</string>
    </property>
   </action>
-  <action name="action_SystemPluginsLocation">
+  <action name="action_SetSystemPluginsLocation">
    <property name="text">
-    <string>&amp;System plugins location...</string>
+    <string>&amp;Set system plugins location...</string>
    </property>
   </action>
  </widget>

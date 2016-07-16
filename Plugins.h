@@ -67,7 +67,7 @@ class Plugins : public QObject {
 		void clearPlugins();
 		int iPluginTry;
 		QMap<QString, QString> qmPluginHash;
-		QString qsCurrentPlugins;
+		QString qsCurrentDirectoryPlugins;
 		QString qsSystemPlugins;
 		QString qsUserPlugins;
 	public:
@@ -75,9 +75,9 @@ class Plugins : public QObject {
 		std::wstring swsIdentity, swsIdentitySent;
 		bool bValid;
 		bool bUnlink;
-		bool CurrentPlugins = true;
-		bool SystemPlugins = true;
-		bool UserPlugins = true;
+		bool bUseCurrentDirPlugins = true;
+		bool bUseSystemPlugins = true;
+		bool bUseUserPlugins = true;
 		float fPosition[3], fFront[3], fTop[3];
 		float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
 

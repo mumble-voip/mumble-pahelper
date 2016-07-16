@@ -53,17 +53,19 @@ PluginInfo::PluginInfo() {
 
 Plugins::Plugins(QObject *p) : QObject(p) {
 	// Current directory plugins
-	qsCurrentPlugins = QDir::currentPath();
+	qsCurrentDirectoryPlugins = QDir::currentPath();
 	// System plugins directory
-	if (QDir("C:/Program Files/Mumble/Plugins").exists())
-		qsSystemPlugins = QLatin1String("C:/Program Files/Mumble/Plugins");
-	else if (QDir("C:/Program Files (x86)/Mumble/Plugins").exists())
-		qsSystemPlugins = QLatin1String("C:/Program Files (x86)/Mumble/Plugins");
+	QDir qdSystemPluginsDir_x64("C:/Program Files/Mumble/Plugins");
+	QDir qdSystemPluginsDir_x86("C:/Program Files (x86)/Mumble/Plugins");
+	if (qdSystemPluginsDir_x64.exists())
+		qsSystemPlugins = qdSystemPluginsDir_x64.absolutePath();
+	else if (qdSystemPluginsDir_x86.exists())
+		qsSystemPlugins = qdSystemPluginsDir_x86.absolutePath();
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
 	// User plugins directory
-	QString AppDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	qsUserPlugins = AppDataLocation + "/AppData/Roaming/Mumble/Plugins";
+	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+	qsUserPlugins = appDataLocation + QLatin1String("/AppData/Roaming/Mumble/Plugins");
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
@@ -99,15 +101,15 @@ void Plugins::rescanPlugins() {
 	prevlocked = locked = NULL;
 	bValid = false;
 
-	QDir qcd(qsCurrentPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
+	QDir qcd(qsCurrentDirectoryPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QDir qd(qsSystemPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QDir qud(qsUserPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QFileInfoList libs;
-	if (CurrentPlugins)
+	if (bUseCurrentDirPlugins)
 		libs += qcd.entryInfoList();
-	if (SystemPlugins)
+	if (bUseSystemPlugins)
 		libs += qd.entryInfoList();
-	if (UserPlugins)
+	if (bUseUserPlugins)
 		libs += qud.entryInfoList();
 	QSet<QString> loaded;
 	foreach(const QFileInfo &libinfo, libs) {
