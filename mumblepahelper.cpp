@@ -163,6 +163,13 @@ void MumblePAHelper::on_action_Rescan_triggered(bool) {
     plugins->rescanPlugins();
 }
 
+void MumblePAHelper::on_action_SystemPluginsLocation_triggered(bool) {
+	QString SystemPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Select system plugins directory"), plugins->qsSystemPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (SystemPluginsLocation != NULL)
+		plugins->qsSystemPlugins = SystemPluginsLocation;
+	plugins->rescanPlugins();
+}
+
 void MumblePAHelper::on_action_UserPluginsLocation_triggered(bool) {
     QString UserPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Select user plugins directory"), plugins->qsUserPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if (UserPluginsLocation != NULL)
@@ -170,11 +177,22 @@ void MumblePAHelper::on_action_UserPluginsLocation_triggered(bool) {
     plugins->rescanPlugins();
 }
 
-void MumblePAHelper::on_action_SystemPluginsLocation_triggered(bool) {
-    QString SystemPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Select system plugins directory"), plugins->qsSystemPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (SystemPluginsLocation != NULL)
-        plugins->qsSystemPlugins = SystemPluginsLocation;
-    plugins->rescanPlugins();
+void MumblePAHelper::on_CurrentPlugins_clicked(bool)
+{
+	if (MumblePAHelper::CurrentPlugins->isChecked())
+		plugins->CurrentPlugins = true;
+	else
+		plugins->CurrentPlugins = false;
+	plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_SystemPlugins_clicked(bool)
+{
+	if (MumblePAHelper::SystemPlugins->isChecked())
+		plugins->SystemPlugins = true;
+	else
+		plugins->SystemPlugins = false;
+	plugins->rescanPlugins();
 }
 
 void MumblePAHelper::on_UserPlugins_clicked(bool)
@@ -183,15 +201,5 @@ void MumblePAHelper::on_UserPlugins_clicked(bool)
         plugins->UserPlugins = true;
     else
         plugins->UserPlugins = false;
-    plugins->rescanPlugins();
-}
-
-
-void MumblePAHelper::on_SystemPlugins_clicked(bool)
-{
-    if (MumblePAHelper::SystemPlugins->isChecked())
-        plugins->SystemPlugins = true;
-    else
-        plugins->SystemPlugins = false;
     plugins->rescanPlugins();
 }

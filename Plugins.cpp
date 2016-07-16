@@ -52,15 +52,18 @@ PluginInfo::PluginInfo() {
 }
 
 Plugins::Plugins(QObject *p) : QObject(p) {
-	QString AppDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	qsUserPlugins = AppDataLocation + "/AppData/Roaming/Mumble/Plugins";
-
+	// Current directory plugins
+	qsCurrentPlugins = QDir::currentPath();
+	// System plugins directory
 	if (QDir("C:/Program Files/Mumble/Plugins").exists())
 		qsSystemPlugins = QLatin1String("C:/Program Files/Mumble/Plugins");
 	else if (QDir("C:/Program Files (x86)/Mumble/Plugins").exists())
 		qsSystemPlugins = QLatin1String("C:/Program Files (x86)/Mumble/Plugins");
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
+	// User plugins directory
+	QString AppDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+	qsUserPlugins = AppDataLocation + "/AppData/Roaming/Mumble/Plugins";
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
@@ -96,9 +99,12 @@ void Plugins::rescanPlugins() {
 	prevlocked = locked = NULL;
 	bValid = false;
 
+	QDir qcd(qsCurrentPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QDir qd(qsSystemPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QDir qud(qsUserPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
 	QFileInfoList libs;
+	if (CurrentPlugins)
+		libs += qcd.entryInfoList();
 	if (SystemPlugins)
 		libs += qd.entryInfoList();
 	if (UserPlugins)

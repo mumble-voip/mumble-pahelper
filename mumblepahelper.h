@@ -65,8 +65,9 @@ public slots:
 
     void on_action_UserPluginsLocation_triggered(bool);
     void on_action_SystemPluginsLocation_triggered(bool);
-    void on_UserPlugins_clicked(bool);
-    void on_SystemPlugins_clicked(bool);
+	void on_CurrentPlugins_clicked(bool);
+	void on_SystemPlugins_clicked(bool);
+	void on_UserPlugins_clicked(bool);
 };
 
 #endif // MUMBLEPAHELPER_H
