@@ -719,12 +719,12 @@
   </action>
   <action name="action_SetUserPluginsLocation">
    <property name="text">
-    <string>Set &amp;user plugins directory...</string>
+    <string>Set user plugins directory...</string>
    </property>
   </action>
   <action name="action_SetSystemPluginsLocation">
    <property name="text">
-    <string>&amp;Set system plugins directory...</string>
+    <string>Set system plugins directory...</string>
    </property>
   </action>
  </widget>
