@@ -32,8 +32,7 @@
 #include "ui_mumblepahelper.h"
 
 MumblePAHelper::MumblePAHelper(QWidget *parent) :
-    QMainWindow(parent)
-{
+    QMainWindow(parent) {
     plugins = new Plugins(this);
     plugins->setObjectName(QString::fromUtf8("plugins"));
     setupUi(this);
@@ -41,18 +40,15 @@ MumblePAHelper::MumblePAHelper(QWidget *parent) :
     plugins->rescanPlugins();
 }
 
-MumblePAHelper::~MumblePAHelper()
-{
+MumblePAHelper::~MumblePAHelper() {
     if (plugins)
 	delete plugins;
-
 }
 
 void MumblePAHelper::on_plugins_Fetched() {
     QReadLocker lock(&plugins->qrwlPlugins);
 
     // Output avatar posititon
-
     qdsbAPX->setValue(plugins->fPosition[0]);
     qdsbAPY->setValue(plugins->fPosition[1]);
     qdsbAPZ->setValue(plugins->fPosition[2]);
@@ -66,7 +62,6 @@ void MumblePAHelper::on_plugins_Fetched() {
     qdsbATZ->setValue(plugins->fTop[2]);
 
     // Output camera position
-
     qdsbCPX->setValue(plugins->fCameraPosition[0]);
     qdsbCPY->setValue(plugins->fCameraPosition[1]);
     qdsbCPZ->setValue(plugins->fCameraPosition[2]);
@@ -78,9 +73,6 @@ void MumblePAHelper::on_plugins_Fetched() {
     qdsbCTX->setValue(plugins->fCameraTop[0]);
     qdsbCTY->setValue(plugins->fCameraTop[1]);
     qdsbCTZ->setValue(plugins->fCameraTop[2]);
-
-
-
 }
 
 void MumblePAHelper::on_plugins_IdentityChanged(const QString identity) {
@@ -160,5 +152,43 @@ void MumblePAHelper::on_action_Quit_triggered(bool) {
 }
 
 void MumblePAHelper::on_action_Rescan_triggered(bool) {
+    plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_action_SetSystemPluginsLocation_triggered(bool) {
+    QString systemPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set system plugins directory"), plugins->qsSystemPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (systemPluginsLocation != NULL)
+        plugins->qsSystemPlugins = systemPluginsLocation;
+    plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_action_SetUserPluginsLocation_triggered(bool) {
+    QString userPluginsLocation = QFileDialog::getExistingDirectory(this, tr("Set user plugins directory"), plugins->qsUserPlugins, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (userPluginsLocation != NULL)
+        plugins->qsUserPlugins = userPluginsLocation;
+    plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_qcbCurrentDirectoryPlugins_stateChanged() {
+    if (qcbCurrentDirectoryPlugins->isChecked())
+        plugins->bUseCurrentDirPlugins = true;
+    else
+        plugins->bUseCurrentDirPlugins = false;
+    plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_qcbSystemPlugins_stateChanged() {
+    if (qcbSystemPlugins->isChecked())
+        plugins->bUseSystemPlugins = true;
+    else
+        plugins->bUseSystemPlugins = false;
+    plugins->rescanPlugins();
+}
+
+void MumblePAHelper::on_qcbUserPlugins_stateChanged() {
+    if (qcbUserPlugins->isChecked())
+        plugins->bUseUserPlugins = true;
+    else
+        plugins->bUseUserPlugins = false;
     plugins->rescanPlugins();
 }
