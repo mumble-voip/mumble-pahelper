@@ -98,17 +98,19 @@ void MumblePAHelper::on_plugins_PluginList(const QList<PluginInfo*> plist) {
     qlPluginInfo->setText(tr("No plugin selected"));
     QReadLocker lock(&plugins->qrwlPlugins);
     foreach (PluginInfo *pi, plist) {
-	qlwPlugins->addItem(pi->shortname);
+        QListWidgetItem *item = new QListWidgetItem(pi->shortname);
+        item->setData(Qt::UserRole, pi->filename);
+        qlwPlugins->addItem(item);
     }
 }
 
 void MumblePAHelper::on_qpbConfig_clicked(bool) {
     QListWidgetItem *item = qlwPlugins->currentItem();
     if(item) {
-	QString name = item->text();
+	QString filename = item->data(Qt::UserRole).toString();
 	QReadLocker lock(&plugins->qrwlPlugins);
 	foreach (PluginInfo *pi, plugins->qlPlugins) {
-	    if (pi->shortname == name) {
+	    if (pi->filename == filename) {
 		lock.unlock();
 		if (pi->p->config)
 			pi->p->config((HWND)winId());
@@ -128,11 +130,11 @@ void MumblePAHelper::on_qlwPlugins_currentItemChanged(QListWidgetItem *item, QLi
 	return;
     }
 
-    QString name = item->text();
+    QString filename = item->data(Qt::UserRole).toString();
     QReadLocker lock(&plugins->qrwlPlugins);
     bool bFound = false;
     foreach (PluginInfo *pi, plugins->qlPlugins) {
-	if (pi->shortname == name) {
+	if (pi->filename == filename) {
 	    qlPluginInfo->setText(tr("Filename: %1\nShortname: %2\nDescription: %3").arg(pi->filename, pi->shortname, pi->description));
 	    bFound = true;
 	    break;
