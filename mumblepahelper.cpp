@@ -87,6 +87,32 @@ void MumblePAHelper::on_plugins_ContextChanged(const QString context) {
 
 void MumblePAHelper::on_plugins_LinkLost(const PluginInfo *pi) {
     QMainWindow::statusBar()->showMessage(tr("Lost link to plugin %1").arg(pi->shortname));
+
+	// Reset avatar posititon
+	qdsbAPX->setValue(0);
+	qdsbAPY->setValue(0);
+	qdsbAPZ->setValue(0);
+
+	qdsbAFX->setValue(0);
+	qdsbAFY->setValue(0);
+	qdsbAFZ->setValue(0);
+
+	qdsbATX->setValue(0);
+	qdsbATY->setValue(0);
+	qdsbATZ->setValue(0);
+
+	// Reset camera position
+	qdsbCPX->setValue(0);
+	qdsbCPY->setValue(0);
+	qdsbCPZ->setValue(0);
+
+	qdsbCFX->setValue(0);
+	qdsbCFY->setValue(0);
+	qdsbCFZ->setValue(0);
+
+	qdsbCTX->setValue(0);
+	qdsbCTY->setValue(0);
+	qdsbCTZ->setValue(0);
 }
 
 void MumblePAHelper::on_plugins_Linked(const PluginInfo *pi) {
