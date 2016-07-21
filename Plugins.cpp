@@ -64,8 +64,8 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
 	// User plugins directory
-	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	qsUserPlugins = appDataLocation + QLatin1String("/AppData/Roaming/Mumble/Plugins");
+	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	qsUserPlugins = appDataLocation + QLatin1String("/Plugins");
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
