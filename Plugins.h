@@ -35,6 +35,11 @@
 #include <QtCore>
 #include <string>
 
+#ifdef Q_OS_UNIX
+#define __cdecl
+typedef unsigned long HWND;
+#endif
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <Tlhelp32.h>

@@ -18,3 +18,5 @@ HEADERS  += mumblepahelper.h \
     Plugins.h
 
 FORMS    += mumblepahelper.ui
+
+CONFIG += c++11

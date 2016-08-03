@@ -35,8 +35,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "Plugins.h"
-#include "ui_MumblePAHelper.h"
-
+#include "ui_mumblepahelper.h"
 
 class MumblePAHelper : public QMainWindow, public Ui::MumblePAHelper
 {
