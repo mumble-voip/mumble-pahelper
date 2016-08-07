@@ -139,7 +139,7 @@ void MumblePAHelper::on_qpbConfig_clicked(bool) {
 	    if (pi->filename == filename) {
 		lock.unlock();
 		if (pi->p->config)
-			pi->p->config((HWND)winId());
+			pi->p->config(0);
 		else {
 			QMessageBox::information(this, QLatin1String("MumblePAHelper"), tr("Plugin has no configure function."), QMessageBox::Ok, QMessageBox::NoButton);
 		}
