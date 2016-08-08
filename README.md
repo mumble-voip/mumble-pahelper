@@ -1,6 +1,6 @@
-# mumble-pahelper
+# Mumble Positional Audio Helper
 
-Mumble Positional Audio Helper is a small tool for testing the functionality
+MumblePAHelper is a small tool for testing the functionality
 of positional audio plugins outside of Mumble.
 
 You can use this tool to quickly see if your plugin is working as it should.
