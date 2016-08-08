@@ -35,11 +35,6 @@
 #include <QtCore>
 #include <string>
 
-#ifdef Q_OS_UNIX
-#define __cdecl
-typedef unsigned long HWND;
-#endif
-
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <Tlhelp32.h>
@@ -61,44 +56,44 @@ struct PluginInfo {
 
 class Plugins : public QObject {
 	friend class MumblePAHelper;
-	private:
-		Q_OBJECT
-		Q_DISABLE_COPY(Plugins)
-	protected:
-		QReadWriteLock qrwlPlugins;
-		QList<PluginInfo *> qlPlugins;
-		PluginInfo *locked;
-		PluginInfo *prevlocked;
-		void clearPlugins();
-		int iPluginTry;
-		QMap<QString, QString> qmPluginHash;
-		QString qsCurrentDirectoryPlugins;
-		QString qsSystemPlugins;
-		QString qsUserPlugins;
-	public:
-		std::string ssContext, ssContextSent;
-		std::wstring swsIdentity, swsIdentitySent;
-		bool bValid;
-		bool bUnlink;
-		bool bUseCurrentDirPlugins = true;
-		bool bUseSystemPlugins = true;
-		bool bUseUserPlugins = true;
-		float fPosition[3], fFront[3], fTop[3];
-		float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
+private:
+	Q_OBJECT
+	Q_DISABLE_COPY(Plugins)
+protected:
+	QReadWriteLock qrwlPlugins;
+	QList<PluginInfo *> qlPlugins;
+	PluginInfo *locked;
+	PluginInfo *prevlocked;
+	void clearPlugins();
+	int iPluginTry;
+	QMap<QString, QString> qmPluginHash;
+	QString qsCurrentDirectoryPlugins;
+	QString qsSystemPlugins;
+	QString qsUserPlugins;
+public:
+	std::string ssContext, ssContextSent;
+	std::wstring swsIdentity, swsIdentitySent;
+	bool bValid;
+	bool bUnlink;
+	bool bUseCurrentDirPlugins = true;
+	bool bUseSystemPlugins = true;
+	bool bUseUserPlugins = true;
+	float fPosition[3], fFront[3], fTop[3];
+	float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
 
-		Plugins(QObject *p = NULL);
-		~Plugins();
-	public slots:
-		void on_Timer_timeout();
-		void rescanPlugins();
-		bool fetch();
-	signals:
-		void Fetched();
-		void IdentityChanged(const QString);
-		void ContextChanged(const QString);
-		void LinkLost(const PluginInfo*);
-		void Linked(const PluginInfo*);
-		void PluginList(const QList<PluginInfo*>);
+	Plugins(QObject *p = NULL);
+	~Plugins();
+public slots:
+	void on_Timer_timeout();
+	void rescanPlugins();
+	bool fetch();
+signals:
+	void Fetched();
+	void IdentityChanged(const QString);
+	void ContextChanged(const QString);
+	void LinkLost(const PluginInfo*);
+	void Linked(const PluginInfo*);
+	void PluginList(const QList<PluginInfo*>);
 };
 
 #endif

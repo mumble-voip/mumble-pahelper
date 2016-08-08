@@ -185,7 +185,7 @@ bool Plugins::fetch() {
 		}
 	}
 	else {
-	    emit Fetched();
+		emit Fetched();
 	}
 
 	bValid = ok;
