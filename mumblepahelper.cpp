@@ -130,9 +130,29 @@ void MumblePAHelper::on_plugins_PluginList(const QList<PluginInfo*> plist) {
 	}
 }
 
+void MumblePAHelper::on_qpbAbout_clicked(bool) {
+	QListWidgetItem *item = qlwPlugins->currentItem();
+	if (item) {
+		QString filename = item->data(Qt::UserRole).toString();
+		QReadLocker lock(&plugins->qrwlPlugins);
+		foreach (PluginInfo *pi, plugins->qlPlugins) {
+			if (pi->filename == filename) {
+				lock.unlock();
+				if (pi->p->about) {
+					pi->p->about(0);
+				}
+				else {
+					QMessageBox::information(this, QLatin1String("MumblePAHelper"), tr("Plugin has no about function."), QMessageBox::Ok, QMessageBox::NoButton);
+				}
+				break;
+			}
+		}
+	}
+}
+
 void MumblePAHelper::on_qpbConfig_clicked(bool) {
 	QListWidgetItem *item = qlwPlugins->currentItem();
-	if(item) {
+	if (item) {
 		QString filename = item->data(Qt::UserRole).toString();
 		QReadLocker lock(&plugins->qrwlPlugins);
 		foreach (PluginInfo *pi, plugins->qlPlugins) {
@@ -146,7 +166,6 @@ void MumblePAHelper::on_qpbConfig_clicked(bool) {
 				break;
 			}
 		}
-
 	}
 }
 
