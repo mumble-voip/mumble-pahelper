@@ -55,6 +55,7 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 	// Current directory plugins
 	qsCurrentDirectoryPlugins = QDir::currentPath();
 	// System plugins directory
+#if defined(Q_OS_WIN)
 	QDir qdSystemPluginsDir_x64("C:/Program Files/Mumble/Plugins");
 	QDir qdSystemPluginsDir_x86("C:/Program Files (x86)/Mumble/Plugins");
 	if (qdSystemPluginsDir_x64.exists())
@@ -63,6 +64,14 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 		qsSystemPlugins = qdSystemPluginsDir_x86.absolutePath();
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
+#elif defined(Q_OS_LINUX)
+	QDir qdSystemPluginsDir("/usr/lib/mumble");
+	if (qdSystemPluginsDir.exists()) {
+		qsSystemPlugins = qdSystemPluginsDir.absolutePath();
+	} else {
+		qsSystemPlugins = QLatin1String("Plugins");
+	}
+#endif
 	// User plugins directory
 	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 	qsUserPlugins = appDataLocation + QLatin1String("/Plugins");
