@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MumblePAHelper</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resources/MumblePAHelper.ico</normaloff>resources/MumblePAHelper.ico</iconset>
+  </property>
   <property name="statusTip">
    <string/>
   </property>
