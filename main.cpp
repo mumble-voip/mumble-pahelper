@@ -28,6 +28,11 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifdef MINGW_STATIC_BUILD
+#include <QtPlugin>
+Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin)
+#endif
+
 #include <QApplication>
 #include "mumblepahelper.h"
 
