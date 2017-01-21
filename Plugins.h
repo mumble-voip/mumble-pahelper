@@ -37,7 +37,7 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
-#include <Tlhelp32.h>
+#include <tlhelp32.h>
 #endif
 
 #include "../mumble/plugins/mumble_plugin.h"
