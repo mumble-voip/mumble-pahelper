@@ -9,9 +9,10 @@ QT       += core gui widgets
 TARGET = MumblePAHelper
 TEMPLATE = app
 
-win32-g++:CONFIG(static) {
-  DEFINES += MINGW_STATIC_BUILD
-  LIBS += -lqwindows -lQt5PlatformSupport
+win32 {
+  isEqual(QT_MAJOR_VERSION, 5) {
+    QTPLUGIN += qwindows
+  }
 }
 
 SOURCES += main.cpp\
