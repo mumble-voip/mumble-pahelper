@@ -31,27 +31,37 @@
 
 #include "Plugins.h"
 
-inline QString u8(const ::std::string &str) {
-	return QString::fromUtf8(str.data(), static_cast<int>(str.length()));
+inline QString MumbleStringToQString(const MumbleString &str) {
+	Q_ASSERT(str.data != NULL);
+
+	if (str.data != NULL) {
+		return QString::fromUtf8(reinterpret_cast<const char*>(str.data), str.len);
+	}
+
+	return QString();
 }
 
-inline QString u8(const ::std::wstring &str) {
-	return QString::fromStdWString(str);
-}
+static inline QString MumbleStringToQString(const MumbleWideString &wstr) {
+	Q_ASSERT(wstr.data != NULL);
 
-inline ::std::string u8(const QString &str) {
-	const QByteArray &qba = str.toUtf8();
-	return ::std::string(qba.constData(), qba.length());
+	if (wstr.data != NULL) {
+		return QString::fromWCharArray(wstr.data, wstr.len);
+	}
+
+	return QString();
 }
 
 PluginInfo::PluginInfo() {
 	locked = false;
 	enabled = false;
 	p = NULL;
-	p2 = NULL;
 }
 
-Plugins::Plugins(QObject *p) : QObject(p) {
+Plugins::Plugins(QObject *p)
+	: QObject(p)
+	, msContext{contextBuf, 0, 256}
+	, mwsIdentity{identityBuf, 0, 256}
+{
 	// Current directory plugins
 	qsCurrentDirectoryPlugins = QDir::currentPath();
 	// System plugins directory
@@ -134,19 +144,11 @@ void Plugins::rescanPlugins() {
 				if (mpf) {
 					pi->p = mpf();
 					if (pi->p && (pi->p->magic == MUMBLE_PLUGIN_MAGIC)) {
-						pi->description = QString::fromStdWString(pi->p->description);
+						pi->description = QString::fromWCharArray(pi->p->description);
 						qInfo("Description: %s", qPrintable(pi->description));
-						pi->shortname = QString::fromStdWString(pi->p->shortname);
+						pi->shortname = QString::fromWCharArray(pi->p->shortname);
 						qInfo("Shortname: %s", qPrintable(pi->shortname));
 						pi->enabled = true;
-
-						mumblePlugin2Func mpf2 = reinterpret_cast<mumblePlugin2Func>(pi->lib.resolve("getMumblePlugin2"));
-						if (mpf2) {
-							pi->p2 = mpf2();
-							if (pi->p2->magic != MUMBLE_PLUGIN_MAGIC_2) {
-								pi->p2 = NULL;
-							}
-						}
 
 						qlPlugins << pi;
 						loaded.insert(fname);
@@ -179,7 +181,7 @@ bool Plugins::fetch() {
 	if (!locked->enabled)
 		bUnlink = true;
 
-	bool ok = locked->p->fetch(fPosition, fFront, fTop, fCameraPosition, fCameraFront, fCameraTop, ssContext, swsIdentity);
+	bool ok = locked->p->fetch(fPosition, fFront, fTop, fCameraPosition, fCameraFront, fCameraTop, &msContext, &mwsIdentity);
 	if (! ok || bUnlink) {
 		lock.unlock();
 		QWriteLocker wlock(&qrwlPlugins);
@@ -201,37 +203,52 @@ bool Plugins::fetch() {
 	return bValid;
 }
 
+static MumblePIDLookupStatus lookup_func(MumblePIDLookupContext ctx, const wchar_t *procname, unsigned long long int *pid) {
+	std::multimap<std::wstring, unsigned long long int> *pids = reinterpret_cast<std::multimap<std::wstring, unsigned long long int> *>(ctx);
+	std::multimap<std::wstring, unsigned long long int>::const_iterator iter = pids->find(std::wstring(procname));
+
+	if (iter != pids->end()) {
+		if (pid) {
+			*pid = iter->second;
+			return MUMBLE_PID_LOOKUP_OK;
+		}
+	}
+
+	return MUMBLE_PID_LOOKUP_EOF;
+}
+
 void Plugins::on_Timer_timeout() {
 	fetch();
 
 	QReadLocker lock(&qrwlPlugins);
 
 	if (prevlocked) {
+		context.clear();
+		identity.clear();
+		emit ContextChanged(context);
+		emit IdentityChanged(identity);
 		emit LinkLost(prevlocked);
 		prevlocked = NULL;
 	}
 
-	if (! locked) {
-		ssContext.clear();
-		swsIdentity.clear();
-	}
-
-	std::string context;
-	if (locked)
-		context.assign(u8(QString::fromStdWString(locked->p->shortname)) + static_cast<char>(0) + ssContext);
-
-	if ((context != ssContextSent) || (swsIdentity != swsIdentitySent)) {
-		if (context != ssContextSent) {
-			ssContextSent.assign(context);
-			emit ContextChanged(u8(context));
-		}
-		if (swsIdentity != swsIdentitySent) {
-			swsIdentitySent.assign(swsIdentity);
-			emit IdentityChanged(u8(swsIdentity));
-		}
-	}
-
 	if (locked) {
+		QString new_context, new_identity;
+
+		new_context.reserve(256);
+		new_context += QString::fromWCharArray(locked->p->shortname);
+		new_context += '\0';
+		new_context += MumbleStringToQString(msContext);
+		if (context != new_context) {
+			context = new_context;
+			emit ContextChanged(context);
+		}
+
+		new_identity = MumbleStringToQString(mwsIdentity);
+		if (identity != new_identity) {
+			identity = new_identity;
+			emit IdentityChanged(identity);
+		}
+
 		return;
 	}
 
@@ -313,8 +330,8 @@ void Plugins::on_Timer_timeout() {
 
 	PluginInfo *pi = qlPlugins.at(iPluginTry);
 	if (pi->enabled) {
-		if (pi->p2 ? pi->p2->trylock(pids) : pi->p->trylock()) {
-			pi->shortname = QString::fromStdWString(pi->p->shortname);
+		if (pi->p && pi->p->trylock(lookup_func, &pids)) {
+			pi->shortname = QString::fromWCharArray(pi->p->shortname);
 			emit Linked(pi);
 			pi->locked = true;
 			bUnlink = false;

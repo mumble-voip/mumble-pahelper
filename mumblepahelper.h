@@ -54,8 +54,6 @@ public slots:
 	void on_plugins_Linked(const PluginInfo*);
 	void on_plugins_PluginList(const QList<PluginInfo*>);
 
-	void on_qpbAbout_clicked(bool);
-	void on_qpbConfig_clicked(bool);
 	void on_qlwPlugins_currentItemChanged(QListWidgetItem*, QListWidgetItem*);
 
 	void on_action_Unlink_triggered(bool);

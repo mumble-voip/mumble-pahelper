@@ -50,7 +50,6 @@ struct PluginInfo {
 	QString description;
 	QString shortname;
 	MumblePlugin *p;
-	MumblePlugin2 *p2;
 	PluginInfo();
 };
 
@@ -71,8 +70,11 @@ protected:
 	QString qsSystemPlugins;
 	QString qsUserPlugins;
 public:
-	std::string ssContext, ssContextSent;
-	std::wstring swsIdentity, swsIdentitySent;
+	QString context, identity;
+	MumbleString msContext;
+	MumbleWideString mwsIdentity;
+	unsigned char contextBuf[256];
+	wchar_t identityBuf[256];
 	bool bValid;
 	bool bUnlink;
 	bool bUseCurrentDirPlugins = true;

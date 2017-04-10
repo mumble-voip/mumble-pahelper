@@ -130,44 +130,6 @@ void MumblePAHelper::on_plugins_PluginList(const QList<PluginInfo*> plist) {
 	}
 }
 
-void MumblePAHelper::on_qpbAbout_clicked(bool) {
-	QListWidgetItem *item = qlwPlugins->currentItem();
-	if (item) {
-		QString filename = item->data(Qt::UserRole).toString();
-		QReadLocker lock(&plugins->qrwlPlugins);
-		foreach (PluginInfo *pi, plugins->qlPlugins) {
-			if (pi->filename == filename) {
-				lock.unlock();
-				if (pi->p->about) {
-					pi->p->about(0);
-				} else {
-					QMessageBox::information(this, QLatin1String("MumblePAHelper"), tr("Plugin has no about function."), QMessageBox::Ok, QMessageBox::NoButton);
-				}
-				break;
-			}
-		}
-	}
-}
-
-void MumblePAHelper::on_qpbConfig_clicked(bool) {
-	QListWidgetItem *item = qlwPlugins->currentItem();
-	if (item) {
-		QString filename = item->data(Qt::UserRole).toString();
-		QReadLocker lock(&plugins->qrwlPlugins);
-		foreach (PluginInfo *pi, plugins->qlPlugins) {
-			if (pi->filename == filename) {
-				lock.unlock();
-				if (pi->p->config)
-					pi->p->config(0);
-				else {
-					QMessageBox::information(this, QLatin1String("MumblePAHelper"), tr("Plugin has no configure function."), QMessageBox::Ok, QMessageBox::NoButton);
-				}
-				break;
-			}
-		}
-	}
-}
-
 void MumblePAHelper::on_qlwPlugins_currentItemChanged(QListWidgetItem *item, QListWidgetItem*) {
 	if(item == NULL) {
 		qlPluginInfo->setText(tr("No plugin selected"));
