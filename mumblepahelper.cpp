@@ -36,6 +36,7 @@ MumblePAHelper::MumblePAHelper(QWidget *parent) :
 	plugins = new Plugins(this);
 	plugins->setObjectName(QString::fromUtf8("plugins"));
 	setupUi(this);
+	installEventFilter(this);
 	QMainWindow::statusBar()->showMessage(tr("Not linked to plugin"));
 	plugins->rescanPlugins();
 }
@@ -43,6 +44,18 @@ MumblePAHelper::MumblePAHelper(QWidget *parent) :
 MumblePAHelper::~MumblePAHelper() {
 	if (plugins)
 		delete plugins;
+}
+
+// We use an event filter to prevent the status bar message
+// from being cleared when moving the cursor over a menu option.
+// This happens because the menu sends a signal to the status bar
+// containing the option's tip, which is empty.
+bool MumblePAHelper::eventFilter(QObject *object, QEvent *event) {
+	if (event->type() == QEvent::StatusTip) {
+		return true;
+	} else {
+		return QObject::eventFilter(object, event);
+	}
 }
 
 void MumblePAHelper::on_plugins_Fetched() {
