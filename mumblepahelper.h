@@ -66,6 +66,7 @@ public slots:
 	void on_action_SetSystemPluginsLocation_triggered(bool);
 
 private slots:
+	bool eventFilter(QObject *object, QEvent *event);
 	void on_qcbCurrentDirectoryPlugins_stateChanged();
 	void on_qcbSystemPlugins_stateChanged();
 	void on_qcbUserPlugins_stateChanged();
