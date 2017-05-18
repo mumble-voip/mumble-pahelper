@@ -30,6 +30,12 @@
 */
 
 #include "Plugins.h"
+#include <QtGlobal>
+#if QT_VERSION >= 0x050400
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
 
 inline QString u8(const ::std::string &str) {
 	return QString::fromUtf8(str.data(), static_cast<int>(str.length()));
@@ -73,7 +79,11 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 	}
 #endif
 	// User plugins directory
+#if QT_VERSION >= 0x050400
 	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#else
+	QString appDataLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
 	qsUserPlugins = appDataLocation + QLatin1String("/Plugins");
 
 	QTimer *timer=new QTimer(this);
