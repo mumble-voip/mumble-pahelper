@@ -133,16 +133,16 @@ void Plugins::rescanPlugins() {
 			PluginInfo *pi = new PluginInfo();
 			pi->lib.setFileName(libname);
 			pi->filename = fname;
-			qInfo("Plugin: %s", qPrintable(pi->filename));
+			qDebug("Plugin: %s", qPrintable(pi->filename));
 			if (pi->lib.load()) {
 				mumblePluginFunc mpf = reinterpret_cast<mumblePluginFunc>(pi->lib.resolve("getMumblePlugin"));
 				if (mpf) {
 					pi->p = mpf();
 					if (pi->p && (pi->p->magic == MUMBLE_PLUGIN_MAGIC)) {
 						pi->description = QString::fromStdWString(pi->p->description);
-						qInfo("Description: %s", qPrintable(pi->description));
+						qDebug("Description: %s", qPrintable(pi->description));
 						pi->shortname = QString::fromStdWString(pi->p->shortname);
-						qInfo("Shortname: %s", qPrintable(pi->shortname));
+						qDebug("Shortname: %s", qPrintable(pi->shortname));
 						pi->enabled = true;
 
 						mumblePlugin2Func mpf2 = reinterpret_cast<mumblePlugin2Func>(pi->lib.resolve("getMumblePlugin2"));
