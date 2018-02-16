@@ -8,3 +8,4 @@
 *.pro.user
 ui_*.h
 /mumblepahelper_plugin_import.cpp
+.directory
