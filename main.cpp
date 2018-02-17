@@ -33,7 +33,6 @@
 
 int main(int argc, char *argv[])
 {
-	QCoreApplication::setApplicationName("Mumble");
 	QApplication a(argc, argv);
 	MumblePAHelper w;
 	w.show();
