@@ -31,6 +31,12 @@
 
 #include "Plugins.h"
 
+#if QT_VERSION >= 0x050000
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
+
 inline QString u8(const ::std::string &str) {
 	return QString::fromUtf8(str.data(), static_cast<int>(str.length()));
 }
@@ -69,7 +75,7 @@ Plugins::Plugins(QObject *p)
 		qsSystemPlugins = qdSystemPluginsDir_x86.absolutePath();
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
-#elif defined(Q_OS_LINUX)
+#else
 	QDir qdSystemPluginsDir("/usr/lib/mumble");
 	if (qdSystemPluginsDir.exists()) {
 		qsSystemPlugins = qdSystemPluginsDir.absolutePath();
@@ -78,8 +84,16 @@ Plugins::Plugins(QObject *p)
 	}
 #endif
 	// User plugins directory
-	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-	qsUserPlugins = appDataLocation + QLatin1String("/Plugins");
+#if QT_VERSION >= 0x050000
+	const QString homeLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+#else
+	const QString homeLocation = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
+#endif
+#if defined(Q_OS_WIN)
+	qsUserPlugins = homeLocation + QLatin1String("/AppData/Roaming/Mumble/Plugins");
+#else
+	qsUserPlugins = homeLocation + QLatin1String("/.local/share/Mumble/Mumble/plugins");
+#endif
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
