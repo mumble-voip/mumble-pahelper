@@ -26,8 +26,6 @@ FORMS    += mumblepahelper.ui
 
 win32:RC_ICONS += resources/MumblePAHelper.ico
 
-CONFIG += c++11
-
 CONFIG(debug, debug|release) {
   CONFIG += console
   DESTDIR   = $$_PRO_FILE_PWD_/debug

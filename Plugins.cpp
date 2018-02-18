@@ -51,7 +51,12 @@ PluginInfo::PluginInfo() {
 	p2 = NULL;
 }
 
-Plugins::Plugins(QObject *p) : QObject(p) {
+Plugins::Plugins(QObject *p)
+	: QObject(p)
+	, bUseCurrentDirPlugins(true)
+	, bUseSystemPlugins(true)
+	, bUseUserPlugins(true)
+{
 	// Current directory plugins
 	qsCurrentDirectoryPlugins = QDir::currentPath();
 	// System plugins directory
