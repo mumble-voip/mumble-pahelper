@@ -31,6 +31,12 @@
 
 #include "Plugins.h"
 
+#if QT_VERSION >= 0x050000
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
+
 inline QString u8(const ::std::string &str) {
 	return QString::fromUtf8(str.data(), static_cast<int>(str.length()));
 }
@@ -51,7 +57,12 @@ PluginInfo::PluginInfo() {
 	p2 = NULL;
 }
 
-Plugins::Plugins(QObject *p) : QObject(p) {
+Plugins::Plugins(QObject *p)
+	: QObject(p)
+	, bUseCurrentDirPlugins(true)
+	, bUseSystemPlugins(true)
+	, bUseUserPlugins(true)
+{
 	// Current directory plugins
 	qsCurrentDirectoryPlugins = QDir::currentPath();
 	// System plugins directory
@@ -64,7 +75,7 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 		qsSystemPlugins = qdSystemPluginsDir_x86.absolutePath();
 	else
 		qsSystemPlugins = QLatin1String("Plugins");
-#elif defined(Q_OS_LINUX)
+#else
 	QDir qdSystemPluginsDir("/usr/lib/mumble");
 	if (qdSystemPluginsDir.exists()) {
 		qsSystemPlugins = qdSystemPluginsDir.absolutePath();
@@ -73,8 +84,16 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 	}
 #endif
 	// User plugins directory
-	QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-	qsUserPlugins = appDataLocation + QLatin1String("/Plugins");
+#if QT_VERSION >= 0x050000
+	const QString homeLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+#else
+	const QString homeLocation = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
+#endif
+#if defined(Q_OS_WIN)
+	qsUserPlugins = homeLocation + QLatin1String("/AppData/Roaming/Mumble/Plugins");
+#else
+	qsUserPlugins = homeLocation + QLatin1String("/.local/share/Mumble/Mumble/plugins");
+#endif
 
 	QTimer *timer=new QTimer(this);
 	timer->setObjectName(QLatin1String("Timer"));
@@ -128,16 +147,16 @@ void Plugins::rescanPlugins() {
 			PluginInfo *pi = new PluginInfo();
 			pi->lib.setFileName(libname);
 			pi->filename = fname;
-			qInfo("Plugin: %s", qPrintable(pi->filename));
+			qDebug("Plugin: %s", qPrintable(pi->filename));
 			if (pi->lib.load()) {
 				mumblePluginFunc mpf = reinterpret_cast<mumblePluginFunc>(pi->lib.resolve("getMumblePlugin"));
 				if (mpf) {
 					pi->p = mpf();
 					if (pi->p && (pi->p->magic == MUMBLE_PLUGIN_MAGIC)) {
 						pi->description = QString::fromStdWString(pi->p->description);
-						qInfo("Description: %s", qPrintable(pi->description));
+						qDebug("Description: %s", qPrintable(pi->description));
 						pi->shortname = QString::fromStdWString(pi->p->shortname);
-						qInfo("Shortname: %s", qPrintable(pi->shortname));
+						qDebug("Shortname: %s", qPrintable(pi->shortname));
 						pi->enabled = true;
 
 						mumblePlugin2Func mpf2 = reinterpret_cast<mumblePlugin2Func>(pi->lib.resolve("getMumblePlugin2"));

@@ -75,9 +75,9 @@ public:
 	std::wstring swsIdentity, swsIdentitySent;
 	bool bValid;
 	bool bUnlink;
-	bool bUseCurrentDirPlugins = true;
-	bool bUseSystemPlugins = true;
-	bool bUseUserPlugins = true;
+	bool bUseCurrentDirPlugins;
+	bool bUseSystemPlugins;
+	bool bUseUserPlugins;
 	float fPosition[3], fFront[3], fTop[3];
 	float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
 
