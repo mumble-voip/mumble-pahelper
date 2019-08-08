@@ -15,7 +15,7 @@ User directory: **%AppData%\Roaming\Mumble\Plugins**
 ### Linux
 System directory: **/usr/lib/mumble**
 
-User directory: **~/.local/share/Mumble/Plugins**
+User directory: **~/.local/share/Mumble/Mumble/Plugins**
 ___
 Mumble installs the plugins in the system directory and downloads the updated ones in the user
 directory.
