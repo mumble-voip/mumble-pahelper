@@ -1,5 +1,5 @@
 sudo: required # Required for apt-get build-dep
-dist: trusty
+dist: xenial
 language: cpp
 compiler: gcc
 
