@@ -66,7 +66,7 @@ Plugins::Plugins(QObject *p)
 #if defined(Q_OS_WIN)
 	qsUserPlugins = homeLocation + QLatin1String("/AppData/Roaming/Mumble/Plugins");
 #else
-	qsUserPlugins = homeLocation + QLatin1String("/.local/share/Mumble/Mumble/plugins");
+	qsUserPlugins = homeLocation + QLatin1String("/.local/share/Mumble/Mumble/Plugins");
 #endif
 
 	QTimer *timer=new QTimer(this);
