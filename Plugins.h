@@ -14,7 +14,7 @@
 #include <tlhelp32.h>
 #endif
 
-#include "../mumble/plugins/mumble_plugin.h"
+#include "mumble_plugin.h"
 
 struct PluginInfo {
 	bool locked;
