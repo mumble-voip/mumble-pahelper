@@ -1,11 +1,14 @@
-/Makefile
-/Makefile.Debug
-/Makefile.Release
-/debug/
-/release/
-*.pdb
-*~
-*.pro.user
-ui_*.h
-/mumblepahelper_plugin_import.cpp
-.directory
+/build/
+
+# https://github.com/github/gitignore/blob/master/CMake.gitignore
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
